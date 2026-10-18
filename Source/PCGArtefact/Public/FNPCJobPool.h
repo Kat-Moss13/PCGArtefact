@@ -16,5 +16,11 @@ struct FNPCJobPool : public FTableRowBase
 	EJobType JobType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString Surname;
+	int WorkStartTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int WorkEndTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<UStaticMesh> WorkplaceMesh;
 };
