@@ -15,4 +15,7 @@ struct FNPCNamePool : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Surname;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool Sex;
 };

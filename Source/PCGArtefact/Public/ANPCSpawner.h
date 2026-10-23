@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "ANPCSpawner.generated.h"
 
+class UPCGBasePointData;
 class UNPCRegistry;
 class UNPCIDGenerator;
 struct FNPCState;
@@ -20,9 +21,11 @@ public:
 	ANPCSpawner();
 
 	UFUNCTION(BlueprintCallable, Category="Spawner")
-	ANPCCharacter* SpawnNPCFromPCG(const FVector& location, const FRotator& rotation, const FNPCState& initialState);
-
+	void SpawnNPCFromPCGData(const UPCGBasePointData* pointData);
+	
 private:
+	void SpawnNPCFromPCG(const FVector& location, const FRotator& rotation, const FNPCState& initialState) const;
+
 	UPROPERTY()
 	UNPCRegistry* Registry;
 

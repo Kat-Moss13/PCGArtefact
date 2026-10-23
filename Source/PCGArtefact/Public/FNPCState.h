@@ -28,10 +28,10 @@ struct FNPCState
 	UPROPERTY()
 	float MoodValue = 0.0f;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	EAgeState AgeState;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	EHealthState HealthState;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -49,16 +49,19 @@ struct FNPCState
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float LastInteractionTime;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	EMoodState MoodState;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<int, int> NPC_IDRelationshipScore;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString Name;
+	FString FirstName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString Surname;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	EPersonalityType PersonalityType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -77,7 +80,7 @@ struct FNPCState
 	{
 		return FString::Printf(
 			TEXT("Name: %s | Age: %d | Mood: %d | Health: %d | Job: %d | Personality: %d"),
-			*Name, AgeYears,
+			*FirstName, AgeYears,
 			static_cast<int>(MoodState), static_cast<int>(HealthState),
 			static_cast<int>(JobType), static_cast<int>(PersonalityType)
 		);
