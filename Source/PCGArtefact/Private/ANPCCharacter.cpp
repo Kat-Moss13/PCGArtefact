@@ -2,7 +2,6 @@
 
 
 #include "ANPCCharacter.h"
-#include "UNPCRegistry.h"
 
 ANPCCharacter::ANPCCharacter(): NPCState()
 {
@@ -12,9 +11,20 @@ ANPCCharacter::ANPCCharacter(): NPCState()
 void ANPCCharacter::InitialiseFromState(const FNPCState& NewState)
 {
 	NPCState = NewState;
-
+	NPC_ID = NewState.ID;
 	NPCState.UpdateAllEnums();
 }
+
+int32 ANPCCharacter::GetNPCID_Implementation() const
+{
+	return NPC_ID;
+}
+
+const FNPCState ANPCCharacter::GetNPCState_Implementation() const
+{
+	return NPCState;
+}
+
 
 
 

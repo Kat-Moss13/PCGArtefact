@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "FNPCState.h"
+#include "INPCInterface.h"
 #include "GameFramework/Character.h"
 #include "ANPCCharacter.generated.h"
 
 class UNPCRegistry;
 
 UCLASS()
-class PCGARTEFACT_API ANPCCharacter : public ACharacter
+class PCGARTEFACT_API ANPCCharacter : public ACharacter, public INPCInterface
 {
 	GENERATED_BODY()
 
@@ -18,8 +19,9 @@ public:
 	ANPCCharacter();
 
 	void InitialiseFromState(const FNPCState& NewState);
-	const FNPCState& GetState() const {return NPCState;}
-	int32 GetID() const {return NPC_ID;}
+	
+	virtual int32 GetNPCID_Implementation() const override;
+	virtual const FNPCState GetNPCState_Implementation() const override;
 
 	
 private:

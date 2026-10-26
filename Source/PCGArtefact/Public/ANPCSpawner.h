@@ -59,9 +59,6 @@ private:
 	FNPCState CreateNPCState(int32 NPCID,int64 MetadataKey,int32 Seed,const FNPCMetadataAttributes& Attributes) const;
 	void InitialiseNPCStateValues(FNPCState& State, int32 Seed) const;
 
-	UPROPERTY()
-	UNPCRegistry* Registry;
-
 	UPROPERTY(EditAnywhere, Category="NPC")
 	TSubclassOf<ANPCCharacter> NPCClass;
 };

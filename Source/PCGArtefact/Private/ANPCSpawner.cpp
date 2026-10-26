@@ -3,16 +3,20 @@
 
 #include "ANPCSpawner.h"
 
+#include "ANPCCharacter.h"
+#include "ANPCPopulationManager.h"
+#include "EngineUtils.h"
 #include "FNPCMetadataAttributes.h"
+#include "FNPCState.h"
+#include "INPCPopulationManagerInterface.h"
 #include "InterchangeResult.h"
-#include "UNPCRegistry.h"
 #include "UWeightedRandomLibrary.h"
 #include "Data/PCGBasePointData.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Metadata/PCGMetadata.h"
 
 
-ANPCSpawner::ANPCSpawner(): Registry(nullptr)
+ANPCSpawner::ANPCSpawner()
 {
 	PrimaryActorTick.bCanEverTick = false;
 }
@@ -35,16 +39,22 @@ void ANPCSpawner::SpawnNPCFromPCGData(const UPCGBasePointData* PointData) const
 		
 		SpawnNPCFromPCG(Transforms[i].GetLocation(), Transforms[i].Rotator(), State);
 	}
+	
+	for (TActorIterator<ANPCPopulationManager> It(GetWorld()); It; ++It)
+	{
+		INPCPopulationManagerInterface::Execute_RegisterNPCs(*It);
+		break;
+	}
 }
 
 void ANPCSpawner::SpawnNPCFromPCG(const FVector& Location, const FRotator& Rotation, const FNPCState& InitialState) const
 {
 	if(!NPCClass) return;
 	
-	FActorSpawnParameters spawnParameters;
-	spawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 	
-	ANPCCharacter* NPC = GetWorld()->SpawnActor<ANPCCharacter>(NPCClass, Location, Rotation, spawnParameters);
+	ANPCCharacter* NPC = GetWorld()->SpawnActor<ANPCCharacter>(NPCClass, Location, Rotation, SpawnParameters);
 	if (!NPC) return;
 	
 	FNPCState StateCopy = InitialState;
