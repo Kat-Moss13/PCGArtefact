@@ -8,22 +8,21 @@
 void UNPCRegistry::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
-	IDGenerator = NewObject<UNPCIDGenerator>(this);
 }
 
-void UNPCRegistry::RegisterNPC(int NPC_ID, ANPCCharacter* NPCActor, const FNPCState& State)
+void UNPCRegistry::RegisterNPC(const int32 NPC_ID, ANPCCharacter* NPCActor, const FNPCState& State)
 {
 	NPCActors.Add(NPC_ID, NPCActor);
 	NPCStates.Add(NPC_ID, State);
 }
 
-void UNPCRegistry::UnregisterNPC(int NPC_ID)
+void UNPCRegistry::UnregisterNPC(const int32 NPC_ID)
 {
 	NPCActors.Remove(NPC_ID);
 	NPCStates.Remove(NPC_ID);
 }
 
-ANPCCharacter* const* UNPCRegistry::GetNPCActor(int NPC_ID) const
+ANPCCharacter* const* UNPCRegistry::GetNPCActor(const int32 NPC_ID) const
 {
 	if(ANPCCharacter* const* Found = NPCActors.Find(NPC_ID))
 	{
@@ -32,6 +31,6 @@ ANPCCharacter* const* UNPCRegistry::GetNPCActor(int NPC_ID) const
 	return nullptr;
 }
 
-const FNPCState* UNPCRegistry::GetNPCState(int NPC_ID) const { return NPCStates.Find(NPC_ID);}
+const FNPCState* UNPCRegistry::GetNPCState(const int32 NPC_ID) const { return NPCStates.Find(NPC_ID);}
 
-const TMap<int, ANPCCharacter*>& UNPCRegistry::GetAllNPCs() const { return NPCActors; }
+const TMap<int32, ANPCCharacter*>& UNPCRegistry::GetAllNPCs() const { return NPCActors; }

@@ -8,7 +8,6 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "UNPCRegistry.generated.h"
 
-class UNPCIDGenerator;
 class ANPCCharacter;
 /**
  * 
@@ -26,16 +25,13 @@ public:
 	const FNPCState* GetNPCState(int NPC_ID) const;
 	const TMap<int, ANPCCharacter*>& GetAllNPCs() const;
 
-	UPROPERTY()
-	UNPCIDGenerator* IDGenerator;
-
 private:
 	
 	UPROPERTY()
-	TMap<int, ANPCCharacter*> NPCActors;
+	TMap<int32, ANPCCharacter*> NPCActors;
 	
 	UPROPERTY()
-	TMap<int, FNPCState> NPCStates;
+	TMap<int32, FNPCState> NPCStates;
 
 	
 };

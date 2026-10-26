@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EJobType.h"
 #include "FNPCJobPool.generated.h"
 /**
  *
@@ -16,10 +17,10 @@ struct FNPCJobPool : public FTableRowBase
 	EJobType JobType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int WorkStartTime;
+	int32 WorkStartTime;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int WorkEndTime;
+	int32 WorkEndTime;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UStaticMesh> WorkplaceMesh;

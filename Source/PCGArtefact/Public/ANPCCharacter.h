@@ -17,18 +17,16 @@ class PCGARTEFACT_API ANPCCharacter : public ACharacter
 public:
 	ANPCCharacter();
 
-	void InitialiseFromState(const FNPCState& newState);
+	void InitialiseFromState(const FNPCState& NewState);
 	const FNPCState& GetState() const {return NPCState;}
-	int GetID() const {return NPC_ID;}
+	int32 GetID() const {return NPC_ID;}
 
 	
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
-	int NPC_ID = -1;
+	int32 NPC_ID = -1;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
 	FNPCState NPCState;
 	
-	UPROPERTY()
-	UNPCRegistry* Registry;
 };

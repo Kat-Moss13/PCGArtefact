@@ -20,7 +20,7 @@ struct FNPCState
 	GENERATED_BODY()
 
 	UPROPERTY()
-	int AgeYears = 0;
+	int32 AgeYears = 0;
 	
 	UPROPERTY()
 	float HealthValue = 0.0f;
@@ -34,17 +34,17 @@ struct FNPCState
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	EHealthState HealthState;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int ID;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 ID;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float JobSatisfaction;
+	float JobSatisfaction; // 0-1
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	EJobType JobType;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int LastNPCInteractionID;
+	int32 LastNPCInteractionID;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float LastInteractionTime;
@@ -53,27 +53,27 @@ struct FNPCState
 	EMoodState MoodState;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<int, int> NPC_IDRelationshipScore;
+	TMap<int32, int32> NPC_IDRelationshipScore;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FString FirstName;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FString Surname;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	EPersonalityType PersonalityType;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool Sex; //yes for female, no for male
 	
-	void SetAgeValue(int newAgeValue);
-	void SetHealthValue(float newHealthValue);
-	void SetMoodValue(float newMoodValue);
-	ERelationshipState GetRelationshipEnum(int ID) const;
-	int GetRelationshipScore(int ID) const;
-	void ModifyRelationshipScore(int ID, int score);
-	void GetAllTags(FGameplayTagContainer& outTags) const;
+	void SetAgeValue(int32 NewAgeValue);
+	void SetHealthValue(float NewHealthValue);
+	void SetMoodValue(float NewMoodValue);
+	ERelationshipState GetRelationshipEnum(int32 NPC_ID) const;
+	int32 GetRelationshipScore(int32 NPC_ID) const;
+	void ModifyRelationshipScore(int32 NPC_ID, int32 ScoreDelta);
+	void GetAllTags(FGameplayTagContainer& OutTags) const;
 	void UpdateAllEnums();
 	
 	FString ToString() const
@@ -81,8 +81,8 @@ struct FNPCState
 		return FString::Printf(
 			TEXT("Name: %s | Age: %d | Mood: %d | Health: %d | Job: %d | Personality: %d"),
 			*FirstName, AgeYears,
-			static_cast<int>(MoodState), static_cast<int>(HealthState),
-			static_cast<int>(JobType), static_cast<int>(PersonalityType)
+			static_cast<int32>(MoodState), static_cast<int32>(HealthState),
+			static_cast<int32>(JobType), static_cast<int32>(PersonalityType)
 		);
 	}
 
@@ -92,27 +92,27 @@ private:
 	void UpdateMoodState();
 };
 
-inline void FNPCState::SetAgeValue(int newAgeValue)
+inline void FNPCState::SetAgeValue(const int32 NewAgeValue)
 {
-	AgeYears = newAgeValue;
+	AgeYears = NewAgeValue;
 	UpdateAgeState();
 }
 
-inline void FNPCState::SetHealthValue(float newHealthValue)
+inline void FNPCState::SetHealthValue(const float NewHealthValue)
 {
-	HealthValue = newHealthValue;
+	HealthValue = NewHealthValue;
 	UpdateHealthState();
 }
 
-inline void FNPCState::SetMoodValue(float newMoodValue)
+inline void FNPCState::SetMoodValue(const float NewMoodValue)
 {
-	MoodValue = newMoodValue;
+	MoodValue = NewMoodValue;
 	UpdateMoodState();
 }
 
-inline ERelationshipState FNPCState::GetRelationshipEnum(int NPC_ID) const
+inline ERelationshipState FNPCState::GetRelationshipEnum(const int32 NPC_ID) const
 {
-	const int Score = GetRelationshipScore(NPC_ID);
+	const int32 Score = GetRelationshipScore(NPC_ID);
 
 	if (Score >= 0.9) return ERelationshipState::Married;
 	if (Score >= 0.75) return ERelationshipState::Love;
@@ -123,23 +123,23 @@ inline ERelationshipState FNPCState::GetRelationshipEnum(int NPC_ID) const
 	return ERelationshipState::Hate;
 }
 
-inline int FNPCState::GetRelationshipScore(int NPC_ID) const
+inline int32 FNPCState::GetRelationshipScore(const int32 NPC_ID) const
 {
 	return NPC_IDRelationshipScore.FindRef(NPC_ID);
 }
 
-inline void FNPCState::ModifyRelationshipScore(int NPC_ID, int score)
+inline void FNPCState::ModifyRelationshipScore(const int32 NPC_ID, const int32 ScoreDelta)
 {
-	NPC_IDRelationshipScore.FindOrAdd(NPC_ID) += score;
+	NPC_IDRelationshipScore.FindOrAdd(NPC_ID) += ScoreDelta;
 }
 
-inline void FNPCState::GetAllTags(FGameplayTagContainer& outTags) const
+inline void FNPCState::GetAllTags(FGameplayTagContainer& OutTags) const
 {
-	outTags.AddTag(NPCStateTagConverter::GetAgeTag(AgeState));
-	outTags.AddTag(NPCStateTagConverter::GetHealthTag(HealthState));
-	outTags.AddTag(NPCStateTagConverter::GetJobTag(JobType));
-	outTags.AddTag(NPCStateTagConverter::GetMoodTag(MoodState));
-	outTags.AddTag(NPCStateTagConverter::GetPersonalityTag(PersonalityType));
+	OutTags.AddTag(NPCStateTagConverter::GetAgeTag(AgeState));
+	OutTags.AddTag(NPCStateTagConverter::GetHealthTag(HealthState));
+	OutTags.AddTag(NPCStateTagConverter::GetJobTag(JobType));
+	OutTags.AddTag(NPCStateTagConverter::GetMoodTag(MoodState));
+	OutTags.AddTag(NPCStateTagConverter::GetPersonalityTag(PersonalityType));
 }
 
 inline void FNPCState::UpdateAgeState()

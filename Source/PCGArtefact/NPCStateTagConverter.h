@@ -17,10 +17,10 @@
 class NPCStateTagConverter
 {
 public:
-	static FGameplayTag GetAgeTag(EAgeState ageState);
-	static FGameplayTag GetHealthTag(EHealthState healthState);
-	static FGameplayTag GetJobTag(EJobType jobType);
-	static FGameplayTag GetMoodTag(EMoodState moodState);
-	static FGameplayTag GetPersonalityTag(EPersonalityType personalityType);
-	static FGameplayTag GetRelationshipTag(ERelationshipState relationshipState);
+	static FGameplayTag GetAgeTag(EAgeState AgeState);
+	static FGameplayTag GetHealthTag(EHealthState HealthState);
+	static FGameplayTag GetJobTag(EJobType JobType);
+	static FGameplayTag GetMoodTag(EMoodState MoodState);
+	static FGameplayTag GetPersonalityTag(EPersonalityType PersonalityType);
+	static FGameplayTag GetRelationshipTag(ERelationshipState RelationshipState);
 };

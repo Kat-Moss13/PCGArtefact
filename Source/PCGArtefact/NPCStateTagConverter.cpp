@@ -1,98 +1,84 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿#include "NPCStateTagConverter.h"
 
+#include "NPCTags.h"
 
-#include "NPCStateTagConverter.h"
-#include "FNPCAgeTags.h"
-#include "FNPCHealthTags.h"
-#include "FNPCJobTags.h"
-#include "FNPCMoodTags.h"
-#include "FNPCPersonalityTags.h"
-#include "FNPCRelationshipTags.h"
-
-FGameplayTag NPCStateTagConverter::GetAgeTag(EAgeState ageState)
+FGameplayTag NPCStateTagConverter::GetAgeTag(const EAgeState AgeState)
 {
-	const FNPCAgeTags& Tags = FNPCAgeTags::Get();
-	
-	switch(ageState)
-	{
-		case EAgeState::Child: return Tags.Child;
-		case EAgeState::Baby: return Tags.Baby;
-		case EAgeState::YoungAdult: return Tags.YoungAdult;
-		case EAgeState::Elder: return Tags.Elder;
-		case EAgeState::Adult:
-		default: return Tags.Adult;
-	}
+    switch (AgeState)
+    {
+        case EAgeState::Baby: return TAG_NPC_Age_Baby;
+        case EAgeState::Child: return TAG_NPC_Age_Child;
+        case EAgeState::YoungAdult: return TAG_NPC_Age_YoungAdult;
+        case EAgeState::Elder: return TAG_NPC_Age_Elder;
+        case EAgeState::Adult:
+        default: return TAG_NPC_Age_Adult;
+    }
 }
 
-FGameplayTag NPCStateTagConverter::GetHealthTag(EHealthState healthState)
+FGameplayTag NPCStateTagConverter::GetHealthTag(const EHealthState HealthState)
 {
-	const FNPCHealthTags& Tags = FNPCHealthTags::Get();
-	switch(healthState)
-	{
-		case EHealthState::Critical: return Tags.Critical;
-		case EHealthState::Injured: return Tags.Injured;
-		case EHealthState::Sick: return Tags.Sick;
-		case EHealthState::Healthy:
-		default: return Tags.Healthy;
-	}
+    switch (HealthState)
+    {
+        case EHealthState::Critical: return TAG_NPC_Health_Critical;
+        case EHealthState::Injured: return TAG_NPC_Health_Injured;
+        case EHealthState::Sick: return TAG_NPC_Health_Sick;
+        case EHealthState::Healthy:
+        default: return TAG_NPC_Health_Healthy;
+    }
 }
 
-FGameplayTag NPCStateTagConverter::GetJobTag(EJobType jobType)
+FGameplayTag NPCStateTagConverter::GetJobTag(const EJobType JobType)
 {
-	const FNPCJobTags& Tags = FNPCJobTags::Get();
-	switch(jobType)
-	{
-		case EJobType::Baker: return Tags.Baker;
-		case EJobType::Farmer : return Tags.Farmer;
-		case EJobType::ShopKeeper: return Tags.ShopKeeper;
-		case EJobType::Librarian: return Tags.Librarian;
-		case EJobType::Toolsmith: return Tags.Toolsmith;
-		case EJobType::Unemployed:
-		default: return Tags.Unemployed;
-	}
+    switch (JobType)
+    {
+        case EJobType::Baker: return TAG_NPC_Job_Baker;
+        case EJobType::Farmer: return TAG_NPC_Job_Farmer;
+        case EJobType::ShopKeeper: return TAG_NPC_Job_ShopKeeper;
+        case EJobType::Librarian: return TAG_NPC_Job_Librarian;
+        case EJobType::Toolsmith: return TAG_NPC_Job_Toolsmith;
+        case EJobType::Unemployed:
+        default: return TAG_NPC_Job_Unemployed;
+    }
 }
 
-FGameplayTag NPCStateTagConverter::GetMoodTag(EMoodState moodState)
+FGameplayTag NPCStateTagConverter::GetMoodTag(const EMoodState MoodState)
 {
-	const FNPCMoodTags& Tags = FNPCMoodTags::Get();
-	switch(moodState)
-	{
-		case EMoodState::Depressed: return Tags.Depressed;
-		case EMoodState::Fine: return Tags.Fine;
-		case EMoodState::Overjoyed: return Tags.Overjoyed;
-		case EMoodState::Sad: return Tags.Sad;
-		case EMoodState::Happy:
-		default: return Tags.Happy;
-	}
+    switch (MoodState)
+    {
+        case EMoodState::Overjoyed: return TAG_NPC_Mood_Overjoyed;
+        case EMoodState::Fine: return TAG_NPC_Mood_Fine;
+        case EMoodState::Depressed: return TAG_NPC_Mood_Depressed;
+        case EMoodState::Sad: return TAG_NPC_Mood_Sad;
+        case EMoodState::Happy:
+        default: return TAG_NPC_Mood_Happy;
+    }
 }
 
-FGameplayTag NPCStateTagConverter::GetPersonalityTag(EPersonalityType personalityType)
+FGameplayTag NPCStateTagConverter::GetPersonalityTag(const EPersonalityType PersonalityType)
 {
-	const FNPCPersonalityTags& Tags = FNPCPersonalityTags::Get();
-	switch(personalityType)
-	{
-		case EPersonalityType::Crabby: return Tags.Crabby;
-		case EPersonalityType::Extroverted: return Tags.Extroverted;
-		case EPersonalityType::Flirty: return Tags.Flirty;
-		case EPersonalityType::Gloomy: return Tags.Gloomy;
-		case EPersonalityType::Introverted: return Tags.Introverted;
-		case EPersonalityType::Relaxed: return Tags.Relaxed;
-		case EPersonalityType::Friendly:
-		default: return Tags.Friendly;
-	}
+    switch (PersonalityType)
+    {
+        case EPersonalityType::Crabby: return TAG_NPC_Personality_Crabby;
+        case EPersonalityType::Extroverted: return TAG_NPC_Personality_Extroverted;
+        case EPersonalityType::Flirty: return TAG_NPC_Personality_Flirty;
+        case EPersonalityType::Gloomy: return TAG_NPC_Personality_Gloomy;
+        case EPersonalityType::Introverted: return TAG_NPC_Personality_Introverted;
+        case EPersonalityType::Relaxed: return TAG_NPC_Personality_Relaxed;
+        case EPersonalityType::Friendly:
+        default: return TAG_NPC_Personality_Friendly;
+    }
 }
 
-FGameplayTag NPCStateTagConverter::GetRelationshipTag(ERelationshipState relationshipState)
+FGameplayTag NPCStateTagConverter::GetRelationshipTag(const ERelationshipState RelationshipState)
 {
-	const FNPCRelationshipTags& Tags = FNPCRelationshipTags::Get();
-	switch(relationshipState)
-	{
-		case ERelationshipState::Hate: return Tags.Hate;
-		case ERelationshipState::Love: return Tags.Love;
-		case ERelationshipState::Married: return Tags.Married;
-		case ERelationshipState::Friends: return Tags.Friends;
-		case ERelationshipState::Dislike: return Tags.Dislike;
-		case ERelationshipState::Neutral:
-		default: return Tags.Neutral;
-	}
+    switch (RelationshipState)
+    {
+        case ERelationshipState::Friends: return TAG_NPC_Relationship_Friends;
+        case ERelationshipState::Love: return TAG_NPC_Relationship_Love;
+        case ERelationshipState::Hate: return TAG_NPC_Relationship_Hate;
+        case ERelationshipState::Dislike: return TAG_NPC_Relationship_Dislike;
+        case ERelationshipState::Married: return TAG_NPC_Relationship_Married;
+        case ERelationshipState::Neutral:
+        default: return TAG_NPC_Relationship_Neutral;
+    }
 }

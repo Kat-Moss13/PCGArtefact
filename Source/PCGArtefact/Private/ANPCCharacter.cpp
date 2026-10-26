@@ -4,14 +4,14 @@
 #include "ANPCCharacter.h"
 #include "UNPCRegistry.h"
 
-ANPCCharacter::ANPCCharacter(): NPCState(), Registry(nullptr)
+ANPCCharacter::ANPCCharacter(): NPCState()
 {
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-void ANPCCharacter::InitialiseFromState(const FNPCState& newState)
+void ANPCCharacter::InitialiseFromState(const FNPCState& NewState)
 {
-	NPCState = newState;
+	NPCState = NewState;
 
 	NPCState.UpdateAllEnums();
 }
