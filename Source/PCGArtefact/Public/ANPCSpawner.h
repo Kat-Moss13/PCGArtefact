@@ -28,30 +28,30 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Ranges")
 	TArray<FWeightedRange> StartingAgeRange =
 		{
-			FWeightedRange{1,8, 5.0f},
-			FWeightedRange{8,15, 15.0f},
-			FWeightedRange{15,25, 35.0f},
-			FWeightedRange{25,60, 30.0f},
-			FWeightedRange{60,80, 15.0f},
+			FWeightedRange{1.0f,8.0f, 5.0f},
+			FWeightedRange{8.0f,15.0f, 15.0f},
+			FWeightedRange{15.0f,25.0f, 35.0f},
+			FWeightedRange{25.0f,60.0f, 30.0f},
+			FWeightedRange{60.0f,80.0f, 15.0f},
 		};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Ranges")
 	TArray<FWeightedRange> StartingMoodRange =
 		{
-			FWeightedRange{0,0.1, 5.0f},
-			FWeightedRange{0.1,0.4, 15.0f},
-			FWeightedRange{0.4,0.6, 35.0f},
-			FWeightedRange{0.6,0.9, 30.0f},
-			FWeightedRange{0.9,1, 15.0f},
+			FWeightedRange{0.0f,0.1f, 5.0f},
+			FWeightedRange{0.1f,0.4f, 15.0f},
+			FWeightedRange{0.4f,0.6f, 35.0f},
+			FWeightedRange{0.6f,0.9f, 30.0f},
+			FWeightedRange{0.9f,1.0f, 15.0f},
 		};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Ranges")
 	TArray<FWeightedRange> StartingHealthRange =
 		{
-			FWeightedRange{0,0.1, 3.0f},
-			FWeightedRange{0.1,0.3, 7.0f},
-			FWeightedRange{0.3,0.5, 10.0f},
-			FWeightedRange{0.5,1, 70.0f}
+			FWeightedRange{0.0f,0.1f, 3.0f},
+			FWeightedRange{0.1f,0.3f, 7.0f},
+			FWeightedRange{0.3f,0.5f, 10.0f},
+			FWeightedRange{0.5f,1.0f, 70.0f}
 		};
 	
 private:

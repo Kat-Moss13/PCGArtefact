@@ -10,9 +10,13 @@ UTimeManagementComponent::UTimeManagementComponent()
 void UTimeManagementComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UTimeManagementComponent::AdvanceHour, SecondsPerHour, true );
 	
+	
+	CurrentHour = 8;
+	OnHourChanged.Broadcast(CurrentHour);
+	
+	
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UTimeManagementComponent::AdvanceHour, SecondsPerHour, true );
 }
 
 void UTimeManagementComponent::AdvanceHour()

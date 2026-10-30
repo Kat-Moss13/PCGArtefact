@@ -33,7 +33,7 @@ void ANPCSpawner::SpawnNPCFromPCGData(const UPCGBasePointData* PointData) const
 	const TConstPCGValueRange<FTransform> Transforms = PointData->GetConstTransformValueRange();
 	const TConstPCGValueRange<int64> Entries = PointData->GetConstMetadataEntryValueRange();
 
-	for (int i = 1; i < PointData->GetNumPoints(); ++i)
+	for (int i = 1; i <= PointData->GetNumPoints(); ++i)
 	{
 		const FNPCState State = CreateNPCState(i, Entries[i], PointData->GetSeed(i), Attributes);
 		
@@ -90,6 +90,11 @@ void ANPCSpawner::InitialiseNPCStateValues(FNPCState& State, const int32 Seed) c
 	State.JobSatisfaction = 1.0f;
 	State.LastInteractionTime = 0.0f;
 	State.LastNPCInteractionID = 0;
+	
+	if (State.AgeState == EAgeState::Baby || State.AgeState == EAgeState::Child)
+	{
+		State.JobType = EJobType::Unemployed;
+	}
 }
 
 
