@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "ANPCCharacter.h"
-#include "INPCInterface.h"
 #include "UObject/Interface.h"
 #include "INPCPopulationManagerInterface.generated.h"
 

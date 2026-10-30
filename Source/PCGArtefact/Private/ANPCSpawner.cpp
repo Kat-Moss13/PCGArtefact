@@ -7,6 +7,7 @@
 #include "ANPCPopulationManager.h"
 #include "EngineUtils.h"
 #include "FNPCMetadataAttributes.h"
+#include "FNPCNamePool.h"
 #include "FNPCState.h"
 #include "INPCPopulationManagerInterface.h"
 #include "InterchangeResult.h"
@@ -21,7 +22,7 @@ ANPCSpawner::ANPCSpawner()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-void ANPCSpawner::SpawnNPCFromPCGData(const UPCGBasePointData* PointData) const
+void ANPCSpawner::SpawnNPCFromPCGData(const UPCGBasePointData* PointData, TArray<FNPCNamePool> DataTableNames) const
 {
 	if (!PointData) return;
 	
@@ -33,18 +34,55 @@ void ANPCSpawner::SpawnNPCFromPCGData(const UPCGBasePointData* PointData) const
 	const TConstPCGValueRange<FTransform> Transforms = PointData->GetConstTransformValueRange();
 	const TConstPCGValueRange<int64> Entries = PointData->GetConstMetadataEntryValueRange();
 
-	for (int i = 1; i <= PointData->GetNumPoints(); ++i)
+	for (int i = 0; i < PointData->GetNumPoints(); ++i)
 	{
-		const FNPCState State = CreateNPCState(i, Entries[i], PointData->GetSeed(i), Attributes);
+		const FNPCState State = CreateNPCState(i + 1, Entries[i], PointData->GetSeed(i), Attributes, DataTableNames[i]);
 		
 		SpawnNPCFromPCG(Transforms[i].GetLocation(), Transforms[i].Rotator(), State);
 	}
 	
-	for (TActorIterator<ANPCPopulationManager> It(GetWorld()); It; ++It)
+	for (TActorIterator<ANPCPopulationManager> It(GetWorld()); It;)
 	{
 		INPCPopulationManagerInterface::Execute_RegisterNPCs(*It);
 		break;
 	}
+}
+
+TArray<FNPCNamePool> ANPCSpawner::CreateUniqueNames(UDataTable* NameTable, const int32 NumNames, const int32 Seed)
+{
+	return GetRowsFromNames(NameTable, GetUniqueNamesFromPool(NameTable->GetRowNames(), NumNames, Seed));
+}
+
+TArray<FName> ANPCSpawner::GetUniqueNamesFromPool(TArray<FName> AvailableRows, const int32 NumNames, const int32 Seed)
+{
+	FRandomStream RandomStream(Seed);
+
+	TArray<FName> SelectedRows;
+
+	while (!AvailableRows.IsEmpty() && SelectedRows.Num() < NumNames)
+	{
+		const int32 Index = RandomStream.RandRange(0, AvailableRows.Num() - 1);
+
+		SelectedRows.Add(AvailableRows[Index]);
+		AvailableRows.RemoveAtSwap(Index);
+	}
+
+	return SelectedRows;
+}
+
+TArray<FNPCNamePool> ANPCSpawner::GetRowsFromNames(const UDataTable* NameTable, const TArray<FName>& RowNames)
+{
+	TArray<FNPCNamePool> Result;
+
+	for (const FName& RowName : RowNames)
+	{
+		if (const FNPCNamePool* Row = NameTable->FindRow<FNPCNamePool>(RowName, TEXT("GetRowsFromNames")))
+		{
+			Result.Add(*Row);
+		}
+	}
+
+	return Result;
 }
 
 void ANPCSpawner::SpawnNPCFromPCG(const FVector& Location, const FRotator& Rotation, const FNPCState& InitialState) const
@@ -63,14 +101,14 @@ void ANPCSpawner::SpawnNPCFromPCG(const FVector& Location, const FRotator& Rotat
 	NPC->InitialiseFromState(StateCopy);
 }
 
-FNPCState ANPCSpawner::CreateNPCState(const int32 NPCID, const int64 MetadataKey, const int32 Seed, const FNPCMetadataAttributes& Attributes) const
+FNPCState ANPCSpawner::CreateNPCState(const int32 NPCID, const int64 MetadataKey, const int32 Seed, const FNPCMetadataAttributes& Attributes, FNPCNamePool DataTableName) const
 {
 	FNPCState State;
 
 	State.ID = NPCID;
-	State.FirstName = Attributes.FirstName->GetValueFromItemKey(MetadataKey);
-	State.Surname = Attributes.Surname->GetValueFromItemKey(MetadataKey);
-	State.Sex = Attributes.Sex->GetValueFromItemKey(MetadataKey);
+	State.FirstName = DataTableName.FirstName;
+	State.Surname = DataTableName.Surname;
+	State.Sex = DataTableName.Sex;
 	State.PersonalityType = static_cast<EPersonalityType>(Attributes.Personality->GetValueFromItemKey(MetadataKey));
 	State.JobType = static_cast<EJobType>(Attributes.Job->GetValueFromItemKey(MetadataKey));
 

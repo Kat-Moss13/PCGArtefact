@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "FNPCNamePool.h"
 #include "UWeightedRandomLibrary.h"
 #include "GameFramework/Actor.h"
 #include "Metadata/PCGMetadataAttributeTpl.h"
@@ -23,8 +24,11 @@ public:
 	ANPCSpawner();
 
 	UFUNCTION(BlueprintCallable, Category="Spawner")
-	void SpawnNPCFromPCGData(const UPCGBasePointData* PointData) const;
+	void SpawnNPCFromPCGData(const UPCGBasePointData* PointData, TArray<FNPCNamePool> DataTableNames) const;
 
+	UFUNCTION(BlueprintCallable, Category = "Names")
+	static TArray<FNPCNamePool> CreateUniqueNames(UDataTable* NameTable, int32 NumNames, const int32 Seed);
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Ranges")
 	TArray<FWeightedRange> StartingAgeRange =
 		{
@@ -54,11 +58,15 @@ public:
 			FWeightedRange{0.5f,1.0f, 70.0f}
 		};
 	
+	static TArray<FName> GetUniqueNamesFromPool(TArray<FName> AvailableRows, int32 NumNames, const int32 Seed);
+	
 private:
 	void SpawnNPCFromPCG(const FVector& Location, const FRotator& Rotation, const FNPCState& InitialState) const;
-	FNPCState CreateNPCState(int32 NPCID,int64 MetadataKey,int32 Seed,const FNPCMetadataAttributes& Attributes) const;
+	FNPCState CreateNPCState(int32 NPCID,int64 MetadataKey,int32 Seed,const FNPCMetadataAttributes& Attributes, FNPCNamePool DataTableName) const;
 	void InitialiseNPCStateValues(FNPCState& State, int32 Seed) const;
-
+	
+	static TArray<FNPCNamePool> GetRowsFromNames(const UDataTable* NameTable, const TArray<FName>& RowNames);
+	
 	UPROPERTY(EditAnywhere, Category="NPC")
 	TSubclassOf<ANPCCharacter> NPCClass;
 };
