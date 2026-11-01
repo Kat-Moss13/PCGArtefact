@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EActivityState.h"
 #include "EAgeState.h"
 #include "EHealthState.h"
 #include "EJobType.h"

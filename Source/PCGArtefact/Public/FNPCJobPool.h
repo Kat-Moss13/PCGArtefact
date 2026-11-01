@@ -24,4 +24,10 @@ struct FNPCJobPool : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UStaticMesh> WorkplaceMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MoodModifer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float HealthModifer;
 };

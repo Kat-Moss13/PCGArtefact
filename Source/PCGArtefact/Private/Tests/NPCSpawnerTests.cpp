@@ -1,129 +1,315 @@
 ﻿#include "Misc/AutomationTest.h"
 #include "ANPCSpawner.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(
-    FUniqueNamesReturnsRequestedCount,
-    "PCGArtefact.NPCSpawner.UniqueNames.ReturnsRequestedCount",
-    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+namespace NPCSpawnerTestHelpers
+{
+	static TArray<FName> BuildPool(const int32 PoolSize)
+	{
+		TArray<FName> Pool;
+
+		for (int32 i = 1; i <= PoolSize; ++i)
+		{
+			Pool.Add(FName(*FString::FromInt(i)));
+		}
+
+		return Pool;
+	}
+}
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
-    FUniqueNamesNoDuplicates,
-    "PCGArtefact.NPCSpawner.UniqueNames.NoDuplicates",
-    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
-
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(
-    FUniqueNamesDeterministicSeed,
-    "PCGArtefact.NPCSpawner.UniqueNames.DeterministicSeed",
-    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
-
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(
-    FUniqueNamesDifferentSeeds,
-    "PCGArtefact.NPCSpawner.UniqueNames.DifferentSeeds",
-    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
-
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(
-    FUniqueNamesRequestMoreThanPool,
-    "PCGArtefact.NPCSpawner.UniqueNames.RequestMoreThanPool",
-    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
-
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(
-    FUniqueNamesEmptyPool,
-    "PCGArtefact.NPCSpawner.UniqueNames.EmptyPool",
-    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+	FUniqueNamesReturnsRequestedCount,
+	"PCGArtefact.NPCSpawner.UniqueNames.ReturnsRequestedCount",
+	EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool FUniqueNamesReturnsRequestedCount::RunTest(const FString& Parameters)
 {
-    TArray<FName> Pool;
+	const TArray<int32> PoolSizes =
+	{
+		1,
+		5,
+		10,
+		25,
+		50,
+		100,
+		500
+	};
 
-    for (int32 i = 1; i <= 100; ++i)
-    {
-        Pool.Add(FName(*FString::FromInt(i)));
-    }
+	for (const int32 PoolSize : PoolSizes)
+	{
+		for (int32 Seed = 0; Seed < 100; ++Seed)
+		{
+			const TArray<FName> Pool =
+				NPCSpawnerTestHelpers::BuildPool(PoolSize);
 
-    const TArray<FName> Result = ANPCSpawner::GetUniqueNamesFromPool(Pool, 20, 1234);
+			const int32 RequestedCount =
+				FMath::Max(1, PoolSize / 2);
 
-    TestEqual(TEXT("Returns requested count"), Result.Num(), 20);
+			const TArray<FName> Result =
+				ANPCSpawner::GetUniqueNamesFromPool(
+					Pool,
+					RequestedCount,
+					Seed);
 
-    return true;
+			TestEqual(
+				FString::Printf(
+					TEXT("Pool=%d Seed=%d"),
+					PoolSize,
+					Seed),
+				Result.Num(),
+				RequestedCount);
+		}
+	}
+
+	return true;
 }
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(
+	FUniqueNamesNoDuplicates,
+	"PCGArtefact.NPCSpawner.UniqueNames.NoDuplicates",
+	EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool FUniqueNamesNoDuplicates::RunTest(const FString& Parameters)
 {
-    TArray<FName> Pool;
+	const TArray<int32> PoolSizes =
+	{
+		10,
+		25,
+		50,
+		100,
+		500
+	};
 
-    for (int32 i = 1; i <= 100; ++i)
-    {
-        Pool.Add(FName(*FString::FromInt(i)));
-    }
+	for (const int32 PoolSize : PoolSizes)
+	{
+		for (int32 Seed = 0; Seed < 1000; ++Seed)
+		{
+			const TArray<FName> Result =
+				ANPCSpawner::GetUniqueNamesFromPool(
+					NPCSpawnerTestHelpers::BuildPool(PoolSize),
+					FMath::Max(1, PoolSize / 2),
+					Seed);
 
-    const TArray<FName> Result = ANPCSpawner::GetUniqueNamesFromPool(Pool, 50, 1234);
+			const TSet<FName> UniqueNames(Result);
+			
+			TestEqual(
+				FString::Printf(
+					TEXT("Pool=%d Seed=%d"),
+					PoolSize,
+					Seed),
+				UniqueNames.Num(),
+				Result.Num());
+		}
+	}
 
-    TSet<FName> UniqueNames(Result);
-
-    TestEqual(TEXT("All names are unique"), UniqueNames.Num(), Result.Num());
-
-    return true;
+	return true;
 }
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(
+	FUniqueNamesDeterministicSeed,
+	"PCGArtefact.NPCSpawner.UniqueNames.DeterministicSeed",
+	EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool FUniqueNamesDeterministicSeed::RunTest(const FString& Parameters)
 {
-    TArray<FName> Pool;
+	const TArray<int32> PoolSizes =
+	{
+		10,
+		25,
+		50,
+		100,
+		500
+	};
 
-    for (int32 i = 1; i <= 100; ++i)
-    {
-        Pool.Add(FName(*FString::FromInt(i)));
-    }
+	const TArray<int32> RequestCounts =
+	{
+		1,
+		5,
+		10,
+		20,
+		50
+	};
 
-    const TArray<FName> ResultA = ANPCSpawner::GetUniqueNamesFromPool(Pool, 20, 1234);
+	for (const int32 PoolSize : PoolSizes)
+	{
+		for (const int32 RequestCount : RequestCounts)
+		{
+			if (RequestCount > PoolSize)
+			{
+				continue;
+			}
 
-    const TArray<FName> ResultB = ANPCSpawner::GetUniqueNamesFromPool(Pool, 20, 1234);
+			for (int32 Seed = 0; Seed < 1000; ++Seed)
+			{
+				const TArray<FName> Pool =
+					NPCSpawnerTestHelpers::BuildPool(PoolSize);
 
-    TestEqual(TEXT("Same seed returns same result"), ResultA, ResultB);
+				const TArray<FName> ResultA =
+					ANPCSpawner::GetUniqueNamesFromPool(
+						Pool,
+						RequestCount,
+						Seed);
 
-    return true;
+				const TArray<FName> ResultB =
+					ANPCSpawner::GetUniqueNamesFromPool(
+						Pool,
+						RequestCount,
+						Seed);
+
+				TestTrue(
+					FString::Printf(
+						TEXT("Pool=%d Request=%d Seed=%d"),
+						PoolSize,
+						RequestCount,
+						Seed),
+					ResultA == ResultB);
+			}
+		}
+	}
+
+	return true;
 }
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(
+	FUniqueNamesDifferentSeeds,
+	"PCGArtefact.NPCSpawner.UniqueNames.DifferentSeeds",
+	EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool FUniqueNamesDifferentSeeds::RunTest(const FString& Parameters)
 {
-    TArray<FName> Pool;
+	const int32 PoolSize = 100;
+	const int32 RequestCount = 20;
 
-    for (int32 i = 1; i <= 100; ++i)
-    {
-        Pool.Add(FName(*FString::FromInt(i)));
-    }
+	int32 DifferentResults = 0;
 
-    const TArray<FName> ResultA = ANPCSpawner::GetUniqueNamesFromPool(Pool, 20, 1234);
+	for (int32 Seed = 0; Seed < 1000; ++Seed)
+	{
+		const TArray<FName> Pool =
+			NPCSpawnerTestHelpers::BuildPool(PoolSize);
 
-    const TArray<FName> ResultB = ANPCSpawner::GetUniqueNamesFromPool(Pool, 20, 5678);
+		const TArray<FName> ResultA =
+			ANPCSpawner::GetUniqueNamesFromPool(
+				Pool,
+				RequestCount,
+				Seed);
 
-    TestNotEqual(TEXT("Different seeds return different result"), ResultA, ResultB);
+		const TArray<FName> ResultB =
+			ANPCSpawner::GetUniqueNamesFromPool(
+				Pool,
+				RequestCount,
+				Seed + 1);
 
-    return true;
+		if (ResultA != ResultB)
+		{
+			++DifferentResults;
+		}
+	}
+
+	TestTrue(
+		TEXT("Majority of seeds produce different outputs"),
+		DifferentResults > 950);
+
+	return true;
 }
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(
+	FUniqueNamesRequestMoreThanPool,
+	"PCGArtefact.NPCSpawner.UniqueNames.RequestMoreThanPool",
+	EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool FUniqueNamesRequestMoreThanPool::RunTest(const FString& Parameters)
 {
-    TArray<FName> Pool;
+	const TArray<int32> PoolSizes =
+	{
+		1,
+		5,
+		10,
+		25,
+		50,
+		100,
+		500
+	};
 
-    for (int32 i = 1; i <= 100; ++i)
-    {
-        Pool.Add(FName(*FString::FromInt(i)));
-    }
+	for (const int32 PoolSize : PoolSizes)
+	{
+		for (int32 Seed = 0; Seed < 100; ++Seed)
+		{
+			const TArray<FName> Result =
+				ANPCSpawner::GetUniqueNamesFromPool(
+					NPCSpawnerTestHelpers::BuildPool(PoolSize),
+					PoolSize * 10,
+					Seed);
 
-    const TArray<FName> Result = ANPCSpawner::GetUniqueNamesFromPool(Pool, 200, 1234);
+			TestEqual(
+				FString::Printf(
+					TEXT("Pool=%d Seed=%d"),
+					PoolSize,
+					Seed),
+				Result.Num(),
+				PoolSize);
+		}
+	}
 
-    TestEqual(TEXT("Cannot exceed pool size"), Result.Num(), 100);
-
-    return true;
+	return true;
 }
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(
+	FUniqueNamesEmptyPool,
+	"PCGArtefact.NPCSpawner.UniqueNames.EmptyPool",
+	EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool FUniqueNamesEmptyPool::RunTest(const FString& Parameters)
 {
-    TArray<FName> Pool;
+	for (int32 Seed = 0; Seed < 1000; ++Seed)
+	{
+		TArray<FName> EmptyPool;
 
-    const TArray<FName> Result = ANPCSpawner::GetUniqueNamesFromPool(Pool, 20, 1234);
+		const TArray<FName> Result =
+			ANPCSpawner::GetUniqueNamesFromPool(
+				EmptyPool,
+				100,
+				Seed);
 
-    TestEqual(TEXT("Empty pool returns empty result"), Result.Num(), 0);
+		TestEqual(
+			FString::Printf(
+				TEXT("Empty Pool Seed=%d"),
+				Seed),
+			Result.Num(),
+			0);
+	}
 
-    return true;
+	return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(
+	FUniqueNamesSeedStress,
+	"PCGArtefact.NPCSpawner.UniqueNames.SeedStress",
+	EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FUniqueNamesSeedStress::RunTest(const FString& Parameters)
+{
+	const TArray<FName> Pool =
+		NPCSpawnerTestHelpers::BuildPool(100);
+
+	for (int32 Seed = 0; Seed < 10000; ++Seed)
+	{
+		const TArray<FName> Result =
+			ANPCSpawner::GetUniqueNamesFromPool(
+				Pool,
+				20,
+				Seed);
+
+		TestEqual(
+			FString::Printf(TEXT("Count_%d"), Seed),
+			Result.Num(),
+			20);
+
+		const TSet<FName> UniqueNames(Result);
+
+		TestEqual(
+			FString::Printf(TEXT("Unique_%d"), Seed),
+			UniqueNames.Num(),
+			Result.Num());
+	}
+
+	return true;
 }
