@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "INPCPopulationManagerInterface.h"
+#include "UNPCStateEvaluatorComponent.h"
 #include "GameFramework/Actor.h"
 #include "ANPCPopulationManager.generated.h"
 
@@ -28,6 +29,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual TArray<ANPCCharacter*> GetNPCs_Implementation() __override;
 
+	UFUNCTION(BlueprintCallable)
+	void HandleHourChanged(const int32 CurrentHour);
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -42,4 +46,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Population", meta=(AllowPrivateAccess="true"))
 	int32 RegisteredNPCCount = 0;
+	
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UNPCStateEvaluatorComponent> StateEvaluator;
 };

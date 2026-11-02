@@ -1,11 +1,15 @@
 ﻿#include "ANPCPopulationManager.h"
 
+#include "ANPCGameMode.h"
 #include "EngineUtils.h"
+#include "UTimeManagementComponent.h"
 
 
 ANPCPopulationManager::ANPCPopulationManager()
 {
 	PrimaryActorTick.bCanEverTick = false;
+
+	StateEvaluator = CreateDefaultSubobject<UNPCStateEvaluatorComponent>(TEXT("StateEvaluator"));
 }
 
 void ANPCPopulationManager::RegisterNPCs_Implementation()
@@ -55,6 +59,7 @@ ANPCCharacter* ANPCPopulationManager::GetNPCByID_Implementation(int32 NPC_ID)
 
 TArray<ANPCCharacter*> ANPCPopulationManager::GetNPCs_Implementation()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Registry Size: %d"), NPCRegistry.Num());
 	TArray<ANPCCharacter*> NPCs;
     
     for (const TPair<int32, TObjectPtr<ANPCCharacter>>& Pair : NPCRegistry)
@@ -65,11 +70,28 @@ TArray<ANPCCharacter*> ANPCPopulationManager::GetNPCs_Implementation()
     return NPCs;
 }
 
-// Called when the game starts or when spawned
+void ANPCPopulationManager::HandleHourChanged(const int32 CurrentHour)
+{
+	if(!StateEvaluator) return;
+	
+	StateEvaluator->EvaluateAllNPCs(GetNPCs_Implementation(), CurrentHour);
+}
+
+
 void ANPCPopulationManager::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	ANPCGameMode* GameMode = Cast<ANPCGameMode>(GetWorld()->GetAuthGameMode());
+
+	if (!GameMode || !GameMode->TimeManagement)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to get Time Management Component"));
+		return;
+	}
+
+	GameMode->TimeManagement->OnHourChanged.AddDynamic(this, &ANPCPopulationManager::HandleHourChanged);
+
+	UE_LOG(LogTemp, Warning, TEXT("Bound to Hour Changed"));
 }
 
 
