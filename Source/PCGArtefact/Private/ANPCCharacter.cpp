@@ -25,6 +25,11 @@ const FNPCState ANPCCharacter::GetNPCState_Implementation() const
 	return NPCState;
 }
 
+void ANPCCharacter::SetNPCState_Implementation(FNPCState NewState)
+{
+	NPCState = NewState;
+}
+
 
 
 

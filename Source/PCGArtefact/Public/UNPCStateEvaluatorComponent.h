@@ -43,6 +43,4 @@ private:
 	float CalculateMoodChange(const FNPCState& State, FPersonalityTemplate& Personality, FNPCJobPool& Job, FNPCActivity& Activity) const;
 	float CalculateHealthChange(const FNPCState& State, FNPCJobPool& Job, FNPCActivity& Activity) const;
 
-	FName GetJobRowName(EJobType JobType) const;
-	FName GetPersonalityRowName(EPersonalityType PersonalityType) const;
 };

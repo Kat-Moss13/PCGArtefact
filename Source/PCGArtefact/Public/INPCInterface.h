@@ -22,4 +22,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "NPC")
 	const FNPCState GetNPCState() const;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "NPC")
+	void SetNPCState(FNPCState NewState);
 };

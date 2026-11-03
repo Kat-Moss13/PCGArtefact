@@ -22,6 +22,7 @@ public:
 	
 	virtual int32 GetNPCID_Implementation() const override;
 	virtual const FNPCState GetNPCState_Implementation() const override;
+	virtual void SetNPCState_Implementation(FNPCState NewState) override;
 
 	
 private:
