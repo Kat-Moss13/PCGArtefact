@@ -1,6 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "ANPCCharacter.h"
@@ -20,7 +18,7 @@ public:
 	UNPCStateEvaluatorComponent();
 
 	
-	void EvaluateAllNPCs(TArray<ANPCCharacter*> NPCs, const int32 CurrentHour);
+	void EvaluateAllNPCs(TArray<ANPCCharacter*> NPCs, const int32 CurrentHour) const;
 	
 protected:
 	
@@ -37,10 +35,10 @@ protected:
 	int32 AgeUpdateIntervalHours = 6;
 	
 private:
-	void EvaluateNPC(ANPCCharacter* npc, int32 CurrentHour);
-	bool IsWorkingHour(FNPCJobPool& JobData, int32 CurrentHour) const;
+	void EvaluateNPC(ANPCCharacter* NPC, int32 CurrentHour) const;
+	static bool IsWorkingHour(const FNPCJobPool& JobData, int32 CurrentHour);
 
-	float CalculateMoodChange(const FNPCState& State, FPersonalityTemplate& Personality, FNPCJobPool& Job, FNPCActivity& Activity) const;
-	float CalculateHealthChange(const FNPCState& State, FNPCJobPool& Job, FNPCActivity& Activity) const;
+	static float CalculateMoodChange(const FNPCState& State, const FPersonalityTemplate& Personality, const FNPCJobPool& Job, const FNPCActivity& Activity);
+	static float CalculateHealthChange(const FNPCState& State, const FNPCJobPool& Job, const FNPCActivity& Activity);
 
 };

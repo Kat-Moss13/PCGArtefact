@@ -6,4 +6,5 @@
 	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7f23f7da_002D0fa4_002D46bb_002D9358_002D5ff4a9fec530/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from NPCSpawnerTests.cpp" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;ProjectFile&gt;0B532BEE-3E09-3921-8E98-9E161E6FF4B5/dl:Source:..?..?Source/d:PCGArtefact/d:Private/d:Tests/f:NPCSpawnerTests.cpp&lt;/ProjectFile&gt;&#xD;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
+&lt;/SessionState&gt;</s:String>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=UNPC/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

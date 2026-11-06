@@ -1,8 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "ANPCSpawner.h"
-
+﻿#include "ANPCSpawner.h"
 #include "ANPCCharacter.h"
 #include "ANPCPopulationManager.h"
 #include "EngineUtils.h"
@@ -10,10 +6,8 @@
 #include "FNPCNamePool.h"
 #include "FNPCState.h"
 #include "INPCPopulationManagerInterface.h"
-#include "InterchangeResult.h"
 #include "UWeightedRandomLibrary.h"
 #include "Data/PCGBasePointData.h"
-#include "Kismet/KismetMathLibrary.h"
 #include "Metadata/PCGMetadata.h"
 
 

@@ -1,17 +1,15 @@
 ﻿#include "UNPCStateEvaluatorComponent.h"
-
 #include "ANPCCharacter.h"
 #include "FNPCActivity.h"
 #include "FNPCJobPool.h"
 #include "FNPCState.h"
-#include "InterchangeResult.h"
 
 UNPCStateEvaluatorComponent::UNPCStateEvaluatorComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UNPCStateEvaluatorComponent::EvaluateAllNPCs(TArray<ANPCCharacter*> NPCs, const int32 CurrentHour)
+void UNPCStateEvaluatorComponent::EvaluateAllNPCs(TArray<ANPCCharacter*> NPCs, const int32 CurrentHour) const
 {
     for (ANPCCharacter* NPC : NPCs)
     {
@@ -22,7 +20,7 @@ void UNPCStateEvaluatorComponent::EvaluateAllNPCs(TArray<ANPCCharacter*> NPCs, c
 	
 }
 
-void UNPCStateEvaluatorComponent::EvaluateNPC(ANPCCharacter* NPC, int32 CurrentHour)
+void UNPCStateEvaluatorComponent::EvaluateNPC(ANPCCharacter* NPC, const int32 CurrentHour) const
 {
 	if (!NPC->Implements<UNPCInterface>())
 	{
@@ -81,13 +79,13 @@ void UNPCStateEvaluatorComponent::EvaluateNPC(ANPCCharacter* NPC, int32 CurrentH
 	NPC->SetNPCState_Implementation(State);
 }
 
-bool UNPCStateEvaluatorComponent::IsWorkingHour(FNPCJobPool& JobData,const int32 CurrentHour) const
+bool UNPCStateEvaluatorComponent::IsWorkingHour(const FNPCJobPool& JobData,const int32 CurrentHour)
 {
 	return CurrentHour >= JobData.WorkStartTime && CurrentHour < JobData.WorkEndTime;
 }
 
-float UNPCStateEvaluatorComponent::CalculateMoodChange(const FNPCState& State, FPersonalityTemplate& Personality,
-	FNPCJobPool& Job, FNPCActivity& Activity) const
+float UNPCStateEvaluatorComponent::CalculateMoodChange(const FNPCState& State, const FPersonalityTemplate& Personality,
+	const FNPCJobPool& Job, const FNPCActivity& Activity)
 {
 	float MoodChange = 0.0f;
 
@@ -98,8 +96,8 @@ float UNPCStateEvaluatorComponent::CalculateMoodChange(const FNPCState& State, F
 	return MoodChange;
 }
 
-float UNPCStateEvaluatorComponent::CalculateHealthChange(const FNPCState& State, FNPCJobPool& Job,
-	FNPCActivity& Activity) const
+float UNPCStateEvaluatorComponent::CalculateHealthChange(const FNPCState& State, const FNPCJobPool& Job,
+	const FNPCActivity& Activity)
 {
 	float HealthChange = 0.0f;
 

@@ -1,7 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "ANPCCharacter.h"
+﻿#include "ANPCCharacter.h"
 
 ANPCCharacter::ANPCCharacter(): NPCState()
 {

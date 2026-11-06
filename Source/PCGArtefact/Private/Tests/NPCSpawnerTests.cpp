@@ -176,13 +176,12 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 
 bool FUniqueNamesDifferentSeeds::RunTest(const FString& Parameters)
 {
-	const int32 PoolSize = 100;
-	const int32 RequestCount = 20;
-
 	int32 DifferentResults = 0;
 
 	for (int32 Seed = 0; Seed < 1000; ++Seed)
 	{
+		constexpr int32 PoolSize = 100;
+		constexpr int32 RequestCount = 20;
 		const TArray<FName> Pool =
 			NPCSpawnerTestHelpers::BuildPool(PoolSize);
 
