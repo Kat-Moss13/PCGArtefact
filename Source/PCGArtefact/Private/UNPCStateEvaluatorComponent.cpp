@@ -7,17 +7,33 @@
 UNPCStateEvaluatorComponent::UNPCStateEvaluatorComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
+	CurrentHourTillAgeUpdate = AgeUpdateIntervalHours;
 }
 
-void UNPCStateEvaluatorComponent::EvaluateAllNPCs(TArray<ANPCCharacter*> NPCs, const int32 CurrentHour) const
+void UNPCStateEvaluatorComponent::EvaluateAllNPCs(TArray<ANPCCharacter*> NPCs, const int32 CurrentHour)
 {
-    for (ANPCCharacter* NPC : NPCs)
-    {
-        if (!NPC) continue;
-
-        EvaluateNPC(NPC, CurrentHour);
-    }
+	bool UpdateAge = false;
+	CurrentHourTillAgeUpdate -= 1;
 	
+	if(CurrentHourTillAgeUpdate <= 0)
+	{
+		UpdateAge = true;
+		CurrentHourTillAgeUpdate = AgeUpdateIntervalHours;
+	}
+
+	for (ANPCCharacter* NPC : NPCs)
+    {
+	    if (!NPC) continue;
+		
+    	EvaluateNPC(NPC, CurrentHour);
+		if(UpdateAge)
+		{
+			FNPCState State = INPCInterface::Execute_GetNPCState(NPC);
+			State.SetAgeValue(State.AgeYears += 1);
+			NPC->SetNPCState_Implementation(State);
+			UE_LOG(LogTemp, Warning, TEXT("%s | current age =%d"), *State.FirstName, State.AgeYears);
+		}
+    }
 }
 
 void UNPCStateEvaluatorComponent::EvaluateNPC(ANPCCharacter* NPC, const int32 CurrentHour) const

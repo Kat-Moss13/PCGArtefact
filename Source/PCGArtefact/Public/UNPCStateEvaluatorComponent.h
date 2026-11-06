@@ -18,7 +18,7 @@ public:
 	UNPCStateEvaluatorComponent();
 
 	
-	void EvaluateAllNPCs(TArray<ANPCCharacter*> NPCs, const int32 CurrentHour) const;
+	void EvaluateAllNPCs(TArray<ANPCCharacter*> NPCs, const int32 CurrentHour);
 	
 protected:
 	
@@ -30,11 +30,11 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data Tables")
 	TObjectPtr<UDataTable> ActivityTable;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Evaluation")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Evaluation")
 	int32 AgeUpdateIntervalHours = 6;
 	
 private:
+	int32 CurrentHourTillAgeUpdate;
 	void EvaluateNPC(ANPCCharacter* NPC, int32 CurrentHour) const;
 	static bool IsWorkingHour(const FNPCJobPool& JobData, int32 CurrentHour);
 
