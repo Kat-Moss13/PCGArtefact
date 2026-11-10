@@ -32,12 +32,23 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void HandleHourChanged(const int32 CurrentHour);
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void HandleMoodChanged(ANPCCharacter* NPC, EMoodState Mood);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void HandleHealthChanged(ANPCCharacter* NPC, EHealthState Health);
+
 protected:
 
 	virtual void BeginPlay() override;
 
 private:
+	UFUNCTION()
+	void HandleMoodUpdated(EMoodState Mood, int32 NPC_ID);
 
+	UFUNCTION()
+	void HandleHealthUpdated(EHealthState Health, int32 NPC_ID);
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Population", meta=(AllowPrivateAccess="true"))
 	TMap<int32, TObjectPtr<ANPCCharacter>> NPCRegistry;
 

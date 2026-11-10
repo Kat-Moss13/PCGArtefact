@@ -79,6 +79,33 @@ TArray<FNPCNamePool> ANPCSpawner::GetRowsFromNames(const UDataTable* NameTable, 
 	return Result;
 }
 
+void ANPCSpawner::SetWeightedRanges(TArray<float> HealthRanges, TArray<float> AgeRanges, TArray<float> MoodRanges)
+{
+	StartingHealthRange =
+		{
+		FWeightedRange{0.0f,0.1f, HealthRanges[0]},
+		FWeightedRange{0.1f,0.3f, HealthRanges[1]},
+		FWeightedRange{0.3f,0.5f, HealthRanges[2]},
+		FWeightedRange{0.5f,1.0f, HealthRanges[3]}
+		};
+	StartingMoodRange =
+		{
+		FWeightedRange{0.0f,0.1f, MoodRanges[0]},
+		FWeightedRange{0.1f,0.4f, MoodRanges[1]},
+		FWeightedRange{0.4f,0.6f, MoodRanges[2]},
+		FWeightedRange{0.6f,0.9f, MoodRanges[3]},
+		FWeightedRange{0.9f,1.0f, MoodRanges[4]},
+	};
+	StartingAgeRange =
+		{
+		FWeightedRange{1.0f,8.0f, AgeRanges[0]},
+		FWeightedRange{8.0f,15.0f, AgeRanges[1]},
+		FWeightedRange{15.0f,25.0f, AgeRanges[2]},
+		FWeightedRange{25.0f,60.0f, AgeRanges[3]},
+		FWeightedRange{60.0f,80.0f, AgeRanges[4]},
+	};
+}
+
 void ANPCSpawner::SpawnNPCFromPCG(const FVector& Location, const FRotator& Rotation, const FNPCState& InitialState) const
 {
 	if(!NPCClass) return;

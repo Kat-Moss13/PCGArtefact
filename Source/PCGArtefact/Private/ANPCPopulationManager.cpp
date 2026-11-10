@@ -75,8 +75,21 @@ void ANPCPopulationManager::HandleHourChanged(const int32 CurrentHour)
 	if(!StateEvaluator) return;
 	
 	StateEvaluator->EvaluateAllNPCs(GetNPCs_Implementation(), CurrentHour);
+	
 }
 
+void ANPCPopulationManager::HandleMoodChanged_Implementation(ANPCCharacter* NPC, EMoodState Mood)
+{
+}
+
+void ANPCPopulationManager::HandleHealthChanged_Implementation(ANPCCharacter* NPC, EHealthState Health)
+{
+}
+
+void ANPCPopulationManager::HandleHealthUpdated(EHealthState Health, int32 NPC_ID)
+{
+	HandleHealthChanged(GetNPCByID_Implementation(NPC_ID), Health);
+}
 
 void ANPCPopulationManager::BeginPlay()
 {
@@ -90,8 +103,22 @@ void ANPCPopulationManager::BeginPlay()
 	}
 
 	GameMode->TimeManagement->OnHourChanged.AddDynamic(this, &ANPCPopulationManager::HandleHourChanged);
+	StateEvaluator->OnMoodChanged.AddDynamic(this, &ANPCPopulationManager::HandleMoodUpdated);
+	StateEvaluator->OnHealthChanged.AddDynamic(this, &ANPCPopulationManager::HandleHealthUpdated);
 
-	UE_LOG(LogTemp, Warning, TEXT("Bound to Hour Changed"));
+	TArray<ANPCCharacter*> NPCs = GetNPCs_Implementation();
+	for (ANPCCharacter* NPC : NPCs)
+	{
+		FNPCState State = NPC->GetNPCState_Implementation();
+		HandleMoodChanged(NPC, State.MoodState);
+		HandleHealthChanged(NPC, State.HealthState);
+	}
 }
+
+void ANPCPopulationManager::HandleMoodUpdated(EMoodState Mood, int32 NPC_ID)
+{
+	HandleMoodChanged(GetNPCByID_Implementation(NPC_ID), Mood);
+}
+
 
 

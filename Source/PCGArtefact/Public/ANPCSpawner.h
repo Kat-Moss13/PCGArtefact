@@ -69,4 +69,7 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category="NPC")
 	TSubclassOf<ANPCCharacter> NPCClass;
+
+	UFUNCTION(BlueprintCallable)
+	void SetWeightedRanges(TArray<float> HealthRanges, TArray<float> AgeRanges, TArray<float> MoodRanges);
 };

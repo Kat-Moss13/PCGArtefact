@@ -11,9 +11,8 @@
 #include "ShaderCompilerJobTypes.h"
 #include "PCGArtefact/NPCStateTagConverter.h"
 #include "FNPCState.generated.h"
-/**
- *
- */
+
+
 USTRUCT(BlueprintType)
 struct FNPCState
 {

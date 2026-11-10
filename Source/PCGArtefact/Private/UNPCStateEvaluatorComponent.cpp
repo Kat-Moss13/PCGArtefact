@@ -3,6 +3,7 @@
 #include "FNPCActivity.h"
 #include "FNPCJobPool.h"
 #include "FNPCState.h"
+#include "Textures/SlateUpdatableTexture.h"
 
 UNPCStateEvaluatorComponent::UNPCStateEvaluatorComponent()
 {
@@ -36,7 +37,7 @@ void UNPCStateEvaluatorComponent::EvaluateAllNPCs(TArray<ANPCCharacter*> NPCs, c
     }
 }
 
-void UNPCStateEvaluatorComponent::EvaluateNPC(ANPCCharacter* NPC, const int32 CurrentHour) const
+void UNPCStateEvaluatorComponent::EvaluateNPC(ANPCCharacter* NPC, const int32 CurrentHour)
 {
 	if (!NPC->Implements<UNPCInterface>())
 	{
@@ -84,24 +85,44 @@ void UNPCStateEvaluatorComponent::EvaluateNPC(ANPCCharacter* NPC, const int32 Cu
 			break;
 		}
 	}
-	
+	PreviousMoodState = State.MoodState;
 	const float MoodChange = CalculateMoodChange(State,*Personality,*Job,*Activity);
 	State.SetMoodValue(FMath::Clamp(State.MoodValue + MoodChange,0.0f,1.0f));
-	
+
+	PreviousHealthState = State.HealthState;
 	const float HealthChange = CalculateHealthChange(State,*Job,*Activity);
 	State.SetHealthValue(FMath::Clamp(State.HealthValue + HealthChange,0.0f,1.0f));
 
 	UE_LOG(LogTemp, Warning, TEXT("%s | Mood=%.3f | Health=%.3f"), *State.FirstName, State.MoodValue, State.HealthValue);
 	NPC->SetNPCState_Implementation(State);
+	EvaluateMoodChange(State.MoodState, State.ID);
+	EvaluateHealthChange(State.HealthState, State.ID);
 }
+
 
 bool UNPCStateEvaluatorComponent::IsWorkingHour(const FNPCJobPool& JobData,const int32 CurrentHour)
 {
 	return CurrentHour >= JobData.WorkStartTime && CurrentHour < JobData.WorkEndTime;
 }
 
+void UNPCStateEvaluatorComponent::EvaluateMoodChange(const EMoodState& NewMoodState, int32 NPC_ID)
+{
+	if(PreviousMoodState != NewMoodState)
+	{
+		OnMoodChanged.Broadcast(NewMoodState, NPC_ID);
+	}
+}
+
+void UNPCStateEvaluatorComponent::EvaluateHealthChange(const EHealthState& NewHealthState, int32 NPC_ID)
+{
+	if(PreviousHealthState != NewHealthState)
+	{
+		OnHealthChanged.Broadcast(NewHealthState, NPC_ID);
+	}
+}
+
 float UNPCStateEvaluatorComponent::CalculateMoodChange(const FNPCState& State, const FPersonalityTemplate& Personality,
-	const FNPCJobPool& Job, const FNPCActivity& Activity)
+                                                       const FNPCJobPool& Job, const FNPCActivity& Activity)
 {
 	float MoodChange = 0.0f;
 
