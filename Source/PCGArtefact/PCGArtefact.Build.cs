@@ -8,7 +8,7 @@ public class PCGArtefact : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "GameplayTags", "PCG"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "GameplayTags", "PCG", "Blutility", "Slate", "SlateCore", "UMG" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "OpenSubdiv", "UnrealEd" });
 

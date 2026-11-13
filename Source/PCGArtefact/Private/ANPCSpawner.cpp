@@ -154,6 +154,8 @@ void ANPCSpawner::InitialiseNPCStateValues(FNPCState& State, const int32 Seed) c
 	{
 		State.JobType = EJobType::Unemployed;
 	}
+	
+	
 }
 
 
