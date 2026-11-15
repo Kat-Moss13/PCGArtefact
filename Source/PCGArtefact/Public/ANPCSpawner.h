@@ -1,6 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-#pragma once
+﻿#pragma once
 
 #include "FNPCNamePool.h"
 #include "UWeightedRandomLibrary.h"
@@ -22,9 +20,9 @@ class PCGARTEFACT_API ANPCSpawner : public AActor
 
 public:
 	ANPCSpawner();
-
+	
 	UFUNCTION(BlueprintCallable, Category="Spawner")
-	void SpawnNPCFromPCGData(const UPCGBasePointData* PointData, TArray<FNPCNamePool> DataTableNames) const;
+	void SpawnNPCFromPCGData(const UPCGBasePointData* PointData, TArray<FNPCNamePool> DataTableNames);
 
 	UFUNCTION(BlueprintCallable, Category = "Names")
 	static TArray<FNPCNamePool> CreateUniqueNames(UDataTable* NameTable, int32 NumNames, const int32 Seed);

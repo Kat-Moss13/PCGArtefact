@@ -1,15 +1,11 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "ANPCGameMode.generated.h"
 
 class UTimeManagementComponent;
-/**
- * 
- */
+
 UCLASS()
 class PCGARTEFACT_API ANPCGameMode : public AGameModeBase
 {

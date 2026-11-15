@@ -16,13 +16,13 @@ ANPCSpawner::ANPCSpawner()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-void ANPCSpawner::SpawnNPCFromPCGData(const UPCGBasePointData* PointData, TArray<FNPCNamePool> DataTableNames) const
+void ANPCSpawner::SpawnNPCFromPCGData(const UPCGBasePointData* PointData, TArray<FNPCNamePool> DataTableNames)
 {
 	if (!PointData) return;
 	
 	const UPCGMetadata* Metadata = PointData->ConstMetadata();
 	if (!Metadata) return;
-	
+
 	const FNPCMetadataAttributes Attributes = FNPCMetadataAttributes::Create(Metadata);
 	
 	const TConstPCGValueRange<FTransform> Transforms = PointData->GetConstTransformValueRange();
@@ -154,8 +154,6 @@ void ANPCSpawner::InitialiseNPCStateValues(FNPCState& State, const int32 Seed) c
 	{
 		State.JobType = EJobType::Unemployed;
 	}
-	
-	
 }
 
 

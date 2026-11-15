@@ -2,9 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "FNPCNamePool.generated.h"
-/**
- *
- */
+
 USTRUCT(BlueprintType)
 struct FNPCNamePool : public FTableRowBase
 {

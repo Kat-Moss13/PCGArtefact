@@ -1,15 +1,10 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "EditorUtilityWidgetComponents.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "UNumericString.generated.h"
 
-/**
- * 
- */
 UCLASS(Blueprintable, BlueprintType)
 class PCGARTEFACT_API UUNumericString : public UBlueprintFunctionLibrary
 {

@@ -3,7 +3,7 @@
 // Age
 UE_DEFINE_GAMEPLAY_TAG(TAG_NPC_Age_Baby, "Baby");
 UE_DEFINE_GAMEPLAY_TAG(TAG_NPC_Age_Child, "Child");
-UE_DEFINE_GAMEPLAY_TAG(TAG_NPC_Age_YoungAdult, "Young Adult");
+UE_DEFINE_GAMEPLAY_TAG(TAG_NPC_Age_YoungAdult, "YoungAdult");
 UE_DEFINE_GAMEPLAY_TAG(TAG_NPC_Age_Adult, "Adult");
 UE_DEFINE_GAMEPLAY_TAG(TAG_NPC_Age_Elder, "Elder");
 
@@ -15,7 +15,7 @@ UE_DEFINE_GAMEPLAY_TAG(TAG_NPC_Health_Critical, "Critical");
 
 // Jobs
 UE_DEFINE_GAMEPLAY_TAG(TAG_NPC_Job_Farmer, "Farmer");
-UE_DEFINE_GAMEPLAY_TAG(TAG_NPC_Job_ShopKeeper, "Shop Keeper");
+UE_DEFINE_GAMEPLAY_TAG(TAG_NPC_Job_ShopKeeper, "ShopKeeper");
 UE_DEFINE_GAMEPLAY_TAG(TAG_NPC_Job_Unemployed, "Unemployed");
 UE_DEFINE_GAMEPLAY_TAG(TAG_NPC_Job_Baker, "Baker");
 UE_DEFINE_GAMEPLAY_TAG(TAG_NPC_Job_Librarian, "Librarian");

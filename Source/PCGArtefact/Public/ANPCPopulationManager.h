@@ -1,8 +1,7 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
+#include "ANPCSpawner.h"
 #include "INPCPopulationManagerInterface.h"
 #include "UNPCStateEvaluatorComponent.h"
 #include "GameFramework/Actor.h"
@@ -14,7 +13,6 @@ class PCGARTEFACT_API ANPCPopulationManager : public AActor, public INPCPopulati
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
 	ANPCPopulationManager();
 
 	UFUNCTION(BlueprintCallable)
@@ -37,12 +35,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void HandleHealthChanged(ANPCCharacter* NPC, EHealthState Health);
-
+	
 protected:
 
 	virtual void BeginPlay() override;
 
 private:
+	
 	UFUNCTION()
 	void HandleMoodUpdated(EMoodState Mood, int32 NPC_ID);
 
@@ -60,4 +59,7 @@ private:
 	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UNPCStateEvaluatorComponent> StateEvaluator;
+
+	UPROPERTY(VisibleAnywhere)
+	ANPCSpawner* Spawner;
 };

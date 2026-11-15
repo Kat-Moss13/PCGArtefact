@@ -1,8 +1,8 @@
 ﻿#include "ANPCPopulationManager.h"
-
 #include "ANPCGameMode.h"
 #include "EngineUtils.h"
 #include "UTimeManagementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 ANPCPopulationManager::ANPCPopulationManager()
@@ -10,6 +10,7 @@ ANPCPopulationManager::ANPCPopulationManager()
 	PrimaryActorTick.bCanEverTick = false;
 
 	StateEvaluator = CreateDefaultSubobject<UNPCStateEvaluatorComponent>(TEXT("StateEvaluator"));
+	
 }
 
 void ANPCPopulationManager::RegisterNPCs_Implementation()
@@ -32,7 +33,7 @@ void ANPCPopulationManager::RegisterNPCs_Implementation()
         {
             continue;
         }
-
+		NPC->RerunConstructionScripts();
         const int32 NPC_ID = INPCInterface::Execute_GetNPCID(NPC);
 
         NPCRegistry.Add(NPC_ID, NPC);
@@ -105,7 +106,7 @@ void ANPCPopulationManager::BeginPlay()
 	GameMode->TimeManagement->OnHourChanged.AddDynamic(this, &ANPCPopulationManager::HandleHourChanged);
 	StateEvaluator->OnMoodChanged.AddDynamic(this, &ANPCPopulationManager::HandleMoodUpdated);
 	StateEvaluator->OnHealthChanged.AddDynamic(this, &ANPCPopulationManager::HandleHealthUpdated);
-
+	
 	TArray<ANPCCharacter*> NPCs = GetNPCs_Implementation();
 	for (ANPCCharacter* NPC : NPCs)
 	{

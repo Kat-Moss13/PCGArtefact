@@ -3,7 +3,6 @@
 #include "FNPCActivity.h"
 #include "FNPCJobPool.h"
 #include "FNPCState.h"
-#include "Textures/SlateUpdatableTexture.h"
 
 UNPCStateEvaluatorComponent::UNPCStateEvaluatorComponent()
 {

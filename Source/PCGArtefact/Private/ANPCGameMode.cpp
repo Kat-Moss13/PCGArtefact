@@ -1,5 +1,4 @@
 ﻿#include "ANPCGameMode.h"
-
 #include "UTimeManagementComponent.h"
 
 ANPCGameMode::ANPCGameMode()
