@@ -31,7 +31,6 @@ void UNPCStateEvaluatorComponent::EvaluateAllNPCs(TArray<ANPCCharacter*> NPCs, c
 			FNPCState State = INPCInterface::Execute_GetNPCState(NPC);
 			State.SetAgeValue(State.AgeYears += 1);
 			NPC->SetNPCState_Implementation(State);
-			UE_LOG(LogTemp, Warning, TEXT("%s | current age =%d"), *State.FirstName, State.AgeYears);
 		}
     }
 }
@@ -92,7 +91,6 @@ void UNPCStateEvaluatorComponent::EvaluateNPC(ANPCCharacter* NPC, const int32 Cu
 	const float HealthChange = CalculateHealthChange(State,*Job,*Activity);
 	State.SetHealthValue(FMath::Clamp(State.HealthValue + HealthChange,0.0f,1.0f));
 
-	UE_LOG(LogTemp, Warning, TEXT("%s | Mood=%.3f | Health=%.3f"), *State.FirstName, State.MoodValue, State.HealthValue);
 	NPC->SetNPCState_Implementation(State);
 	EvaluateMoodChange(State.MoodState, State.ID);
 	EvaluateHealthChange(State.HealthState, State.ID);
@@ -128,7 +126,6 @@ float UNPCStateEvaluatorComponent::CalculateMoodChange(const FNPCState& State, c
 	MoodChange += Personality.MoodModifier;
 	MoodChange += Job.MoodModifier;
 	MoodChange += Activity.MoodModifier;
-	UE_LOG(LogTemp, Warning, TEXT("%s | MoodChange=%.3f"), *State.FirstName, MoodChange);
 	return MoodChange;
 }
 
@@ -149,7 +146,7 @@ float UNPCStateEvaluatorComponent::CalculateHealthChange(const FNPCState& State,
 		HealthChange += 0.05f;
 	}
 	
-	UE_LOG(LogTemp, Warning, TEXT("%s | Health=%.3f"), *State.FirstName, HealthChange);
+	
 	return HealthChange;
 	
 }

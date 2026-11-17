@@ -60,7 +60,6 @@ ANPCCharacter* ANPCPopulationManager::GetNPCByID_Implementation(int32 NPC_ID)
 
 TArray<ANPCCharacter*> ANPCPopulationManager::GetNPCs_Implementation()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Registry Size: %d"), NPCRegistry.Num());
 	TArray<ANPCCharacter*> NPCs;
     
     for (const TPair<int32, TObjectPtr<ANPCCharacter>>& Pair : NPCRegistry)
@@ -99,7 +98,6 @@ void ANPCPopulationManager::BeginPlay()
 
 	if (!GameMode || !GameMode->TimeManagement)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to get Time Management Component"));
 		return;
 	}
 
